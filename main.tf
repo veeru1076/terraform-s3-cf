@@ -2,7 +2,7 @@ resource "aws_s3_bucket" "prod_website" {
  bucket_prefix = var.bucket_prefix 
  acl    = "public-read"   
  website {   
-   index_document = “update.html"   
+   index_document = "update.html"   
    error_document = "error.html" 
  }
  cors_rule {
