@@ -1,3 +1,6 @@
+provider "aws" {
+     region = var.region
+ }
 resource "aws_s3_bucket" "prod_website" { 
  bucket_prefix = var.bucket_prefix 
  acl    = "public-read"   
@@ -5,15 +8,10 @@ resource "aws_s3_bucket" "prod_website" {
    index_document = "update.html"   
    error_document = "error.html" 
  }
- cors_rule {
-   allowed_headers = ["Authorization", "Content-Length"]
-   allowed_methods = ["GET", "POST"]
-   allowed_origins = [aws_cloudfront_distribution.sample_s3_distribution.domain_name]
-   max_age_seconds = 3000
- }
 }
 resource "aws_s3_bucket_policy" "prod_website_policy" { 
-   bucket = aws_s3_bucket.prod_website.id   policy = <<POLICY
+   bucket = aws_s3_bucket.prod_website.id
+   policy = <<POLICY
    {   
        "Version": "2012-10-17",   
        "Statement": [       
@@ -72,4 +70,7 @@ resource "aws_cloudfront_distribution" "sample_s3_distribution" {
      restriction_type = "none"
    }
  }
+ viewer_certificate {
+    cloudfront_default_certificate = true
+  }
 }
