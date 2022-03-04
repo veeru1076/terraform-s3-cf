@@ -5,7 +5,7 @@ resource "aws_s3_bucket" "prod_website" {
  bucket_prefix = var.bucket_prefix 
  acl    = "public-read"   
  website {   
-   index_document = "update.html"   
+   index_document = "upload.html"   
    error_document = "error.html" 
  }
 }
@@ -34,7 +34,7 @@ resource "aws_s3_bucket_policy" "prod_website_policy" {
 # Cloudfront distribution for main s3 site.
 resource "aws_cloudfront_distribution" "sample_s3_distribution" {
  origin {
-   domain_name = aws_s3_bucket.prod_website.bucket_domain_name
+   domain_name = aws_s3_bucket.prod_website.bucket_regional_domain_name
    origin_id = "${var.bucket_prefix}-origin"
  }
  
@@ -42,13 +42,7 @@ resource "aws_cloudfront_distribution" "sample_s3_distribution" {
  is_ipv6_enabled = true
  default_root_object = "upload.html"
  
- aliases = ["${var.bucket_prefix}"]
- custom_error_response {
-   error_caching_min_ttl = 0
-   error_code = 404
-   response_code = 200
-   response_page_path = "error.html"
- }
+ #aliases = ["${var.bucket_prefix}"]
  
  default_cache_behavior {
    allowed_methods = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH","POST", "PUT"]
