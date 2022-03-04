@@ -1,7 +1,7 @@
 variable "bucket_prefix" { 
  type        = string 
  description = "Name of the s3 bucket to be created"
- default = "sampleFilmInfo.com"
+ default = "samplefilminfo.com"
 }
 
 variable "region" { 
